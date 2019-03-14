@@ -14,7 +14,6 @@ import org.wit.placemark.R
 import org.wit.placemark.main.MainApp
 import org.wit.placemark.models.PlacemarkModel
 
-
 class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
 
     lateinit var app: MainApp
@@ -24,11 +23,12 @@ class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
         setContentView(R.layout.activity_placemark_list)
         app = application as MainApp
 
+        //layout and populate for display
         val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-       // recyclerView.adapter = PlacemarkAdapter(app.placemarks)
-        recyclerView.adapter = PlacemarkAdapter(app.placemarks.findAll(), this)
+        recyclerView.layoutManager = layoutManager   //recyclerView is a widget in activity_placemark_list.xml
+        loadPlacemarks()
 
+        //enable action bar and set title
         toolbarMain.title = title
         setSupportActionBar(toolbarMain)
     }
@@ -49,13 +49,18 @@ class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
         startActivityForResult(intentFor<PlacemarkActivity>().putExtra("placemark_edit", placemark), 0)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int,data: Intent?){
-        //recyclerView is a widget in activity_placemark_list.xml
-        recyclerView.adapter?.notifyDataSetChanged()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        loadPlacemarks()
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    private fun loadPlacemarks() {
+        showPlacemarks(app.placemarks.findAll())
+    }
+
+    fun showPlacemarks (placemarks: List<PlacemarkModel>) {
+        //recyclerView is a widget in activity_placemark_list.xml
+        recyclerView.adapter = PlacemarkAdapter(placemarks, this)
+        recyclerView.adapter?.notifyDataSetChanged()
+    }
 }
-
-
-
