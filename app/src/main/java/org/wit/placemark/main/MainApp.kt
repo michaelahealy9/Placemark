@@ -13,7 +13,8 @@ class MainApp : Application(), AnkoLogger {
 
     override fun onCreate() {
         super.onCreate()
-        placemarks = PlacemarkJSONStore(applicationContext)
+       placemarks = PlacemarkJSONStore(applicationContext)
+        //placemarks = PlacemarkMemStore()
         info("Placemark started")
     }
 }
